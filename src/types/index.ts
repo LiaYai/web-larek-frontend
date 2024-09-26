@@ -10,6 +10,9 @@ export interface ICard {
   price: number | null;
 }
 
+export interface IBasket { 
+  items: ICard[];
+}
 export interface IOrderInfo {
   address: string;
   payment: TPayment;
@@ -21,7 +24,8 @@ export interface IOrderContacts {
 }
 
 export interface IOrder extends IOrderInfo, IOrderContacts {
-  items: string[]
+  items: string[];
+  total: number;
 }
 
 export interface IOrderResult {
@@ -34,7 +38,7 @@ export type TBasketItem = Pick<ICard, 'id' | 'title' | 'price'>
 
 export type TCardFull = Pick<ICard, 'id' | 'category' | 'title' | 'description' | 'image' | 'price'>
 
-export type TPayment = 'card' | 'cash';
+export type TPayment = 'card' | 'cash' | '';
 
 export type TFormErrors = Partial<Record<keyof IOrder, string>>;
 
@@ -54,11 +58,4 @@ export interface IAppState {
   validateOrderContacts: () => boolean;
   setOrderInfo: (data: Record<keyof IOrderInfo, string>) => void;
   setOrderContacts: (data: Record<keyof IOrderContacts, string>) => void; 
-}
-
-
-export interface IAPI {
-  getCatalog: () => Promise<ICard[]>;
-  getSelectedCard: (id: string) => Promise<ICard>;
-  placeOrder: (order: IOrder) => Promise<IOrderResult>;
 }
