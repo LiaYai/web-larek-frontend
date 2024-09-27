@@ -1,12 +1,12 @@
-import { ICard, IAppState, IOrder, TFormErrors, IOrderInfo, IOrderContacts } from "../types";
-import {Model} from "./base/Model";
+import { ICard, IAppState, IOrder, TFormErrors, IOrderInfo, IOrderContacts } from "../../types";
+import { Model } from "../base/Model";
 
 
-export type TCatalogChangeEvent = {
-  catalog: Card[]
-}
+// export type TCatalogChangeEvent = {
+//   catalog: CardItem[]
+// }
 
-export class Card extends Model<ICard> {
+export class CardItem extends Model<ICard> {
   id: string;
   category: string;
   title: string;
@@ -16,7 +16,7 @@ export class Card extends Model<ICard> {
 }
 
 export class AppState extends Model<IAppState> {
-  catalog: Card[];
+  catalog: CardItem[];
   preview: string;
   basket: string[];
   order: IOrder = {
@@ -30,7 +30,7 @@ export class AppState extends Model<IAppState> {
   formErrors: TFormErrors = {};
 
   setCatalog(items: ICard[]) {
-    this.catalog = items.map(item => new Card(item, this.events));
+    this.catalog = items.map(item => new CardItem(item, this.events));
     this.emitChanges('catalog:changed', { catalog: this.catalog });
   }
 
@@ -50,6 +50,10 @@ export class AppState extends Model<IAppState> {
   removeCardFromBasket(id: string) {
     this.basket = this.basket.filter(it => it !== id);
     this.emitChanges('basket:changed', this.basket);
+  }
+
+  getBasket() {
+    return this.basket;
   }
 
   getTotalPrice() {

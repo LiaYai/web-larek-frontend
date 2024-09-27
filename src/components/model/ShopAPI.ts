@@ -1,5 +1,5 @@
-import { ICard, IOrder, IOrderResult } from "../types";
-import { Api, ApiListResponse } from "./base/api";
+import { ICard, IOrder, IOrderResult } from "../../types";
+import { Api, ApiListResponse } from "../base/api";
 
 export interface IAPI {
   getCatalog: () => Promise<ICard[]>;

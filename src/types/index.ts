@@ -1,6 +1,3 @@
-import { Api, ApiPostMethods } from "../components/base/api";
-import { IEvents } from "../components/base/events";
-
 export interface ICard {
   id: string;
   category: string;
