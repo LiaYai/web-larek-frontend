@@ -13,6 +13,7 @@ export class Card extends Component<ICard> {
   protected _description?: HTMLElement;
   protected _price: HTMLElement;
   protected _button?: HTMLButtonElement;
+  protected _index?: HTMLElement;
 
   constructor(container: HTMLElement, actions?: ICardActions) {
       super(container);
@@ -23,6 +24,7 @@ export class Card extends Component<ICard> {
       this._price = container.querySelector(`.card__price`);
       this._button = container.querySelector(`.card__button`);
       this._description = container.querySelector(`.card__text`);
+      this._index = container.querySelector('.basket__item-index');
 
       if (actions?.onClick) {
           if (this._button) {
@@ -33,8 +35,8 @@ export class Card extends Component<ICard> {
       }
   }
 
-  set id(value: string) {
-      this.container.dataset.id = value;
+  set index(value: number) {
+      this.setText(this._index, String(value + 1));
   }
 
   get id(): string {
@@ -43,10 +45,6 @@ export class Card extends Component<ICard> {
 
   set title(value: string) {
       this.setText(this._title, value);
-  }
-
-  get title(): string {
-      return this._title.textContent || '';
   }
 
   set category(value: string) {
@@ -66,5 +64,9 @@ export class Card extends Component<ICard> {
 
   set description(value: string) {
      this.setText(this._description, value);
+  }
+
+  set buttonText(text: string) {
+    this.setText(this._button, text);
   }
 }

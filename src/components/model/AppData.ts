@@ -17,8 +17,7 @@ export class CardItem extends Model<ICard> {
 
 export class AppState extends Model<IAppState> {
   catalog: CardItem[];
-  preview: string;
-  basket: string[];
+  basket: string[] = [];
   order: IOrder = {
     payment: '',
     address: '',
@@ -31,29 +30,24 @@ export class AppState extends Model<IAppState> {
 
   setCatalog(items: ICard[]) {
     this.catalog = items.map(item => new CardItem(item, this.events));
-    this.emitChanges('catalog:changed', { catalog: this.catalog });
+    this.emitChanges('catalog:loaded', { catalog: this.catalog });
   }
 
   setCardPreview(item: ICard) {
-    this.preview = item.id;
     this.emitChanges('preview:changed', item);
   }
 
-  addCardToBasket(id: string) {
+  changeBasket(id: string) {
     if (this.basket.includes(id)) {
-      return;
+      this.basket = this.basket.filter(it => it !== id);
+    } else {
+      this.basket = [...this.basket, id];
     }
-    this.basket = [...this.basket, id];
-    this.emitChanges('basket:changed', this.basket);
+    this.emitChanges('basket:changed');
   }
 
-  removeCardFromBasket(id: string) {
-    this.basket = this.basket.filter(it => it !== id);
-    this.emitChanges('basket:changed', this.basket);
-  }
-
-  getBasket() {
-    return this.basket;
+  getBasket(): CardItem[] {
+    return this.catalog.filter(item => this.basket.includes(item.id));
   }
 
   getTotalPrice() {
@@ -62,7 +56,7 @@ export class AppState extends Model<IAppState> {
 
   clearBasket() {
     this.basket = [];
-    this.emitChanges('basket:changed', this.basket);
+    this.emitChanges('basket:changed');
   }
 
   validateOrderInfo() {

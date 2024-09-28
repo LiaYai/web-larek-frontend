@@ -41,7 +41,6 @@ export type TFormErrors = Partial<Record<keyof IOrder, string>>;
 
 export interface IAppState {
   catalog: ICard[];
-  preview: string;
   basket: string[];
   order: IOrder;
   formErrors: TFormErrors;

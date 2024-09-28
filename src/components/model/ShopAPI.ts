@@ -24,7 +24,8 @@ export class ShopAPI extends Api implements IAPI {
   }
 
   getSelectedCard(id: string): Promise<ICard> {
-    return this.get(`/product/${id}`).then(
+    return this.get(`/product/${id}`)
+    .then(
       (item: ICard) => ({
         ...item,
         image: this.cdn + item.image,
@@ -33,7 +34,8 @@ export class ShopAPI extends Api implements IAPI {
   }
 
   placeOrder(order: IOrder): Promise<IOrderResult> {
-    return this.post('/order/', order).then(
+    return this.post('/order/', order)
+    .then(
       (data: IOrderResult) => data);
   }
 }
