@@ -56,10 +56,12 @@ events.on('preview:changed', (item: ICard) => {
     const card = new Card(cloneTemplate(cardPreviewTemplate), {
       onClick: () => {
         events.emit('basketItems:changed', item);
-        card.buttonText = appData.basket.includes(item.id) ? 'Удалить из корзины' : 'В корзину';
+        card.buttonText = 
+          appData.order.items.includes(item.id) ? 'Удалить из корзины' : 'Добавить в корзину';
       }
   });
-  card.buttonText = appData.basket.includes(item.id) ? 'Удалить из корзины' : 'В корзину';
+  
+  card.buttonText = appData.order.items.includes(item.id) ? 'Удалить из корзины' : 'Добавить в корзину';
     modal.render({
       content: card.render({
         title: item.title,
@@ -130,12 +132,14 @@ events.on('basket:changed', () => {
     });
   });
 
+  basket.selected = appData.order.items;
   basket.total = appData.getTotalPrice();
   page.counter = appData.getBasket().length;
 })
 
 // Открыть корзину
 events.on('basket:open', () => {
+  basket.selected = appData.order.items;
   modal.render({
     content: basket.render()
   });  

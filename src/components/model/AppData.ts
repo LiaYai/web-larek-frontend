@@ -17,7 +17,6 @@ export class CardItem extends Model<ICard> {
 
 export class AppState extends Model<IAppState> {
   catalog: CardItem[];
-  basket: string[] = [];
   order: IOrder = {
     payment: '',
     address: '',
@@ -38,24 +37,24 @@ export class AppState extends Model<IAppState> {
   }
 
   changeBasket(id: string) {
-    if (this.basket.includes(id)) {
-      this.basket = this.basket.filter(it => it !== id);
+    if (this.order.items.includes(id)) {
+      this.order.items = this.order.items.filter(it => it !== id);
     } else {
-      this.basket = [...this.basket, id];
+      this.order.items = [...this.order.items, id];
     }
     this.emitChanges('basket:changed');
   }
 
   getBasket(): CardItem[] {
-    return this.catalog.filter(item => this.basket.includes(item.id));
+    return this.catalog.filter(item => this.order.items.includes(item.id));
   }
 
   getTotalPrice() {
-    return this.basket.reduce((a, c) => a + this.catalog.find(it => it.id === c).price, 0);
+    return this.order.items.reduce((a, c) => a + this.catalog.find(it => it.id === c).price, 0);
   }
 
   clearBasket() {
-    this.basket = [];
+    this.order.items = [];
     this.emitChanges('basket:changed');
   }
 

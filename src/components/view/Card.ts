@@ -59,6 +59,8 @@ export class Card extends Component<ICard> {
         this.setText(this._price, `${formatNumber(value)} синапсов`);
     } else {
         this._price.textContent = 'Бесценно';
+        this.setDisabled(this._button, true);
+        this.buttonText = 'Бесценно же';
     }
   }
 

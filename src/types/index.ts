@@ -7,9 +7,6 @@ export interface ICard {
   price: number | null;
 }
 
-export interface IBasket { 
-  items: ICard[];
-}
 export interface IOrderInfo {
   address: string;
   payment: TPayment;
