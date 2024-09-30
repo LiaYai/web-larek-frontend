@@ -1,4 +1,4 @@
-import { ICard } from "../../types";
+import { categories, ICard, TCategory } from "../../types";
 import { Component } from "../base/Component";
 import { formatNumber } from "../../utils/utils";
 
@@ -47,8 +47,9 @@ export class Card extends Component<ICard> {
       this.setText(this._title, value);
   }
 
-  set category(value: string) {
+  set category(value: TCategory) {
     this.setText(this._category, value);
+    this._category.classList.add(`card__category_${categories[value]}`);
 }
   set image(value: string) {
       this.setImage(this._image, value, this.title)
@@ -58,9 +59,7 @@ export class Card extends Component<ICard> {
     if (value) {
         this.setText(this._price, `${formatNumber(value)} синапсов`);
     } else {
-        this._price.textContent = 'Бесценно';
-        this.setDisabled(this._button, true);
-        this.buttonText = 'Бесценно же';
+        this.setText(this._price, 'Бесценно');
     }
   }
 
@@ -68,7 +67,6 @@ export class Card extends Component<ICard> {
      this.setText(this._description, value);
   }
 
-  set buttonText(text: string) {
-    this.setText(this._button, text);
-  }
+  set buttonText(inBasket: boolean) {
+    this.setText(this._button,inBasket ? 'Удалить из корзины' : 'Добавить в корзину')};
 }

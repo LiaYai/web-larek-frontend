@@ -1,4 +1,4 @@
-import { IOrderInfo, TPayment } from "../../types";
+import { IOrder, TPayment } from "../../types";
 import { ensureAllElements } from "../../utils/utils";
 import { IEvents } from "../base/events";
 import { Form } from "../common/Form";
@@ -7,7 +7,7 @@ export type TabActions = {
   onClick: (tab: string) => void
 }
 
-export class OrderInfo extends Form<IOrderInfo> {
+export class OrderInfo extends Form<Partial<IOrder>> {
   protected _buttons: HTMLButtonElement[];
   constructor(container: HTMLFormElement, events: IEvents, actions?: TabActions) {
       super(container, events);
@@ -18,7 +18,7 @@ export class OrderInfo extends Form<IOrderInfo> {
         button.addEventListener('click', () => {
             actions?.onClick?.(button.name);
         });
-    })
+      })
   }
 
   set address(value: string) {
@@ -28,7 +28,6 @@ export class OrderInfo extends Form<IOrderInfo> {
   set selected(name: TPayment) {
     this._buttons.forEach(button => {
         this.toggleClass(button, 'button_alt-active', button.name === name);
-        this.setDisabled(button, button.name === name)
     });
 }
 

@@ -1,4 +1,4 @@
-import { ICard, IAppState, IOrder, TFormErrors, IOrderInfo, IOrderContacts } from "../../types";
+import { ICard, IAppState, IOrder, TFormErrors, IOrderForm, TPayment } from "../../types";
 import { Model } from "../base/Model";
 
 
@@ -17,6 +17,7 @@ export class CardItem extends Model<ICard> {
 
 export class AppState extends Model<IAppState> {
   catalog: CardItem[];
+  preview: string | null;
   order: IOrder = {
     payment: '',
     address: '',
@@ -33,6 +34,7 @@ export class AppState extends Model<IAppState> {
   }
 
   setCardPreview(item: ICard) {
+    this.preview = item.id;
     this.emitChanges('preview:changed', item);
   }
 
@@ -60,6 +62,7 @@ export class AppState extends Model<IAppState> {
 
   validateOrderInfo() {
     const errors: TFormErrors = {};
+    console.log('validate');
     if (!this.order.address) {
       errors.address = 'Необходимо указать адрес';
     }
@@ -67,7 +70,7 @@ export class AppState extends Model<IAppState> {
       errors.payment = 'Необходимо указать способ оплаты';
     }
     this.formErrors = errors;
-    this.events.emit('formErrors:change', this.formErrors);
+    this.events.emit('formInfoErrors:change', this.formErrors);
     return Object.keys(errors).length === 0;
   }
 
@@ -80,17 +83,28 @@ export class AppState extends Model<IAppState> {
         errors.phone = 'Необходимо указать телефон';
     }
     this.formErrors = errors;
-    this.events.emit('formErrors:change', this.formErrors);
+    this.events.emit('formContactsErrors:change', this.formErrors);
     return Object.keys(errors).length === 0;
   }
 
-  setOrderInfo(data: Record<keyof IOrderInfo, string>) {
-    Object.assign(this.order, data);
-    this.emitChanges('order:changed', this.order);
+  setOrderInfo(field: keyof IOrderForm, value: string) {
+    this.order[field] = value;
+    if (this.validateOrderInfo()) {
+      this.events.emit('order:changed', this.order);
+  }
+    //this.emitChanges('order:changed', this.order);
   }
 
-  setOrderContacts(data: Record<keyof IOrderContacts, string>) {
-    Object.assign(this.order, data);
-    this.emitChanges('order:changed', this.order);
+  setOrderContacts(field: keyof IOrderForm, value: string) {
+    this.order[field] = value;
+    if (this.validateOrderContacts()) {
+      this.events.emit('order:changed', this.order);
+  }
+    //this.emitChanges('order:changed', this.order);
+  }
+
+  setOrderPayment(name: TPayment) {
+    this.order.payment = name;
+    console.log(this.order);
   }
 }
