@@ -72,6 +72,7 @@ events.on('preview:changed', (item: ICard) => {
 				title: item.title,
 				image: item.image,
 				description: item.description,
+				category: item.category,
 				price: item.price,
 			}),
 		});
@@ -150,10 +151,11 @@ events.on('basket:open', () => {
 // Открыть первое окно заказа
 events.on('order:open', () => {
 	orderInfo.selected = 'card';
+	appData.setOrderPayment('card');
 	modal.render({
 		content: orderInfo.render({
 			address: '',
-			payment: null,
+			payment: 'card',
 			valid: false,
 			errors: [],
 		}),
